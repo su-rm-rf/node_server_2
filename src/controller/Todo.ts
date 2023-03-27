@@ -8,7 +8,6 @@ const todo_list = async ctx => {
   if (completed === '0' || completed === '1') {
     sql += ' where completed = ?'
   }
-  console.log(completed, sql, typeof completed)
   const res:any = await db.sqlconnect(sql, [completed])
   utils.responseClient(ctx, constants.reqSuccess, '获取列表成功', res)
 }
