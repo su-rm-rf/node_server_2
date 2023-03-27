@@ -1,9 +1,11 @@
 // import Router from 'koa-router'
 import router from '../utils/swagger'
 
-import Todo from '../controller/Todo'
+import TodoController from '../controllers/Todo'
 
-const { todo_list, todo_detail, todo_add, todo_update, todo_delete, todo_clear } = Todo
+const { 
+  todo_list, todo_detail, todo_add, todo_update, todo_delete, todo_clear
+} = new TodoController()
 
 // const router = new Router({
 //   prefix: ''
