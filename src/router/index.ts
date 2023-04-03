@@ -1,7 +1,7 @@
 // import Router from 'koa-router'
 import router from '../utils/swagger'
 
-import TodoController from '../controllers/Todo'
+import TodoController from '../controller/Todo'
 
 const { 
   todo_list, todo_detail, todo_add, todo_update, todo_delete, todo_clear
@@ -41,7 +41,7 @@ router.get('/', async ctx => {
 
 .post('/todo/update', todo_update)
 
-.post('/todo/delete/:id', todo_delete)
+.post('/todo/delete', todo_delete)
 
 .post('/todo/clear', todo_clear)
 
