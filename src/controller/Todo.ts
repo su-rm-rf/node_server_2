@@ -1,4 +1,3 @@
-import db from '../db'
 import constants from '../constants'
 import utils from '../utils'
 
@@ -7,7 +6,7 @@ import Todo from '../entity/Todo'
 
 export default class TodoController {
 
-  private todoRepository = AppDataSource.getRepository(Todo)
+  // private todoRepository = AppDataSource.getRepository(Todo)
 
   async todo_list(ctx) {
     const { completed } = ctx.query
@@ -22,7 +21,7 @@ export default class TodoController {
   
   async todo_detail(ctx) {
     const { id } = ctx.params
-    let res = await AppDataSource.getRepository(Todo).findOneBy({ id })
+    const res = await AppDataSource.getRepository(Todo).findOneBy({ id })
     if (res) {
       utils.responseClient(ctx, constants.reqSuccess, '获取详情成功', res)
     } else {
@@ -32,12 +31,8 @@ export default class TodoController {
   
   async todo_add(ctx) {
     const { text, completed } = ctx.request.body
-    const sql = 'insert into todo set ?'
-    const res:any = await db.sqlconnect(sql, {
-      text,
-      completed,
-    })
-    if (res.affectedRows === 1) {
+    const res = await AppDataSource.getRepository(Todo).save({ text, completed })
+    if (res) {
       utils.responseClient(ctx, constants.reqSuccess, '保存成功')
     } else {
       utils.responseClient(ctx, constants.dataFail, '保存失败')
@@ -62,7 +57,7 @@ export default class TodoController {
   
   async todo_clear(ctx) {
     const sql = 'delete from todo'
-    const res:any = await db.sqlconnect(sql)
+    const res = await AppDataSource.getRepository(Todo).clear()
     utils.responseClient(ctx, constants.reqSuccess, '删除成功')
   }
 }

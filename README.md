@@ -1,3 +1,8 @@
+# 需求
+```
+开发一个在线文档任务管理工具
+```
+
 # 技术栈
 ```
 框架：Koa
@@ -8,29 +13,18 @@
 # 组织结构
 ```
 src
-  constants
-  controller
-  db                          --- deprecate
-  entity
-  migration
-  model
-  router
-  subscriber
-  utils
-  data-source.ts
-  server.ts
+  constants             --- 常量
+  controller            --- 控制器
+  entity                --- 实体类
+  router                --- 路由
+  utils                 --- 工具
+  data-source.ts        --- ORM配置
+  server.ts             --- 入口文件
 test
-.env
-```
-
-# 建表语句
-```
-create table if not exists todo (
-  id int unsigned auto_increment,
-  text varchar(1024) not null,
-  completed tinyint(1) not null,
-  primary key (id)
-) engine=InnoDB default charset=utf8;
+.env                    --- 环境变量
+.eslintrc
+package.json
+tsconfig.json
 ```
 
 > 使用TypeORM之后，直接根据entity创建表结构
