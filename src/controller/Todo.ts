@@ -4,34 +4,37 @@ import utils from '../utils'
 import { AppDataSource } from '../data-source'
 import Todo from '../entity/Todo'
 
-export default class TodoController {
+const todoRep = AppDataSource.getRepository(Todo)
 
-  // private todoRepository = AppDataSource.getRepository(Todo)
+export default class TodoController {
 
   async todo_list(ctx) {
     const { completed } = ctx.query
     let res = {}
     if (completed === '0' || completed === '1') {
-      res = await AppDataSource.getRepository(Todo).findBy({ completed })
+      res = await todoRep.findBy({ completed })
     } else {
-      res = await AppDataSource.getRepository(Todo).find()
+      res = await todoRep.find()
     }
     utils.responseClient(ctx, constants.reqSuccess, '获取列表成功', res)
   }
   
   async todo_detail(ctx) {
     const { id } = ctx.params
-    const res = await AppDataSource.getRepository(Todo).findOneBy({ id })
-    if (res) {
-      utils.responseClient(ctx, constants.reqSuccess, '获取详情成功', res)
+    const todo: Todo | null = await todoRep.findOneBy({ id })
+    if (todo) {
+      utils.responseClient(ctx, constants.reqSuccess, '获取详情成功', todo)
     } else {
-      utils.responseClient(ctx, constants.dataFail, '获取详情失败', res)
+      utils.responseClient(ctx, constants.dataFail, '获取详情失败', todo)
     }
   }
   
   async todo_add(ctx) {
     const { text, completed } = ctx.request.body
-    const res = await AppDataSource.getRepository(Todo).save({ text, completed })
+    const todo = new Todo()
+    todo.text = text
+    todo.completed = completed
+    const res = await todoRep.save(todo)
     if (res) {
       utils.responseClient(ctx, constants.reqSuccess, '保存成功')
     } else {
@@ -41,23 +44,26 @@ export default class TodoController {
   
   async todo_update(ctx) {
     const { id, text, completed } = ctx.request.body
-    const rp = AppDataSource.getRepository(Todo)
-    let todo: any = await rp.findOneBy({ id })
-    todo.text = text
-    todo.completed = completed
-    todo = await rp.save(todo)
-    utils.responseClient(ctx, constants.reqSuccess, '更新成功', todo)
+    let todo: Todo | null = await todoRep.findOneBy({ id })
+    if (todo) {
+      todo.text = text
+      todo.completed = completed
+      todo = await todoRep.save(todo)
+      utils.responseClient(ctx, constants.reqSuccess, '更新成功', todo)
+    } else {
+      utils.responseClient(ctx, constants.dataFail, '更新失败', todo)
+    }
   }
   
   async todo_delete(ctx) {
     const { id } = ctx.request.body
-    const res = await AppDataSource.getRepository(Todo).delete({ id })
+    const res = await todoRep.delete({ id })
     utils.responseClient(ctx, constants.reqSuccess, '删除成功', res)
   }
   
   async todo_clear(ctx) {
     const sql = 'delete from todo'
-    const res = await AppDataSource.getRepository(Todo).clear()
+    const res = await todoRep.clear()
     utils.responseClient(ctx, constants.reqSuccess, '删除成功')
   }
 }
