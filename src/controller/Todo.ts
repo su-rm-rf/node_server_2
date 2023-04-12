@@ -11,10 +11,10 @@ export default class TodoController {
   async todo_list(ctx) {
     const { completed } = ctx.query
     let res = {}
-    if (completed === '0' || completed === '1') {
-      res = await todoRep.findBy({ completed })
-    } else {
+    if (!completed) {
       res = await todoRep.find()
+    } else {
+      res = await todoRep.findBy({ completed })
     }
     utils.responseClient(ctx, constants.reqSuccess, '获取列表成功', res)
   }

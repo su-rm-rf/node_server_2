@@ -4,8 +4,8 @@ import 'dotenv/config'
 import { AppDataSource } from './data-source'
 
 import Koa from 'koa'
-import koaBody from 'koa-body'
 import cors from 'koa2-cors'
+import KoaBody from 'koa-body'
 import { koaSwagger } from 'koa2-swagger-ui'
 
 import router from './router'
@@ -22,7 +22,7 @@ AppDataSource.initialize().then(() => {
   
   server.use(cors())
   
-  server.use(koaBody({
+  server.use(KoaBody({
     multipart: true
   }))
   

@@ -16,6 +16,7 @@ src
   constants             --- 常量
   controller            --- 控制器
   entity                --- 实体类
+  middlewares           --- 中间件
   router                --- 路由
   utils                 --- 工具
   data-source.ts        --- ORM配置
